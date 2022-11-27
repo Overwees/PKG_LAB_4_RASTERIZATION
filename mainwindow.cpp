@@ -3,6 +3,9 @@
 #include "qcustomplot.h"
 #include <QDebug>
 #include <algorithm>
+#include <QDebug>
+#include <QTimer>
+#include <QElapsedTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -125,20 +128,31 @@ void MainWindow::DrawPlot()
     int x = leMass[4]->text().toInt();
     int y = leMass[5]->text().toInt();
     int R = leMass[6]->text().toInt();
+    QElapsedTimer timer;
     switch(k)
     {
     case 0:
-
+        timer.start();
         DrawStepByStep(x0,y0,x1,y1);
+        qDebug() << "stepbystep:" << timer.nsecsElapsed();
+        timer.restart();
         break;
     case 1:
+        timer.start();
         DrawByDDA(x0,y0,x1,y1);
+        qDebug() << "DDA" << timer.nsecsElapsed();
+        timer.restart();
         break;
     case 2:
+        timer.start();
         DrawByBrezenhemLine(x0,y0,x1,y1);
+        qDebug() << "bresenham" << timer.nsecsElapsed();
+        timer.restart();
         break;
     case 3:
+        timer.start();
         DrawByBrezenhemCircle(x,y,R);
+        qDebug() << "circle" <<  timer.nsecsElapsed();
         break;
     }
 }
